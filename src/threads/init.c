@@ -71,7 +71,7 @@ static void locate_block_device (enum block_type, const char *name);
 #endif
 
 int pintos_init (void) NO_RETURN;
-
+void readline(char[], size_t);
 /* Pintos main entry point. */
 int
 pintos_init (void)
@@ -133,13 +133,61 @@ pintos_init (void)
     /* Run actions specified on kernel command line. */
     run_actions (argv);
   } else {
-    // TODO: no command line passed to kernel. Run interactively 
-  }
 
-  /* Finish up. */
-  shutdown ();
-  thread_exit ();
+    while(1) {
+    	printf("CS2042> ");
+    	char line[10];
+    	readline (line, 10);
+    	
+    	if (strcmp(line,"whoami") == 0) { 
+    		printf("Supul Pushpakumara: 190482K\n") ; 
+    	} else if (strcmp(line,"shutdown") == 0) {
+    		printf("Shutting Down...\n") ; shutdown(); thread_exit();
+    	} else if (strcmp(line,"time") == 0) {
+    		printf("Number of seconds since Unix epoch - %lu s\n", rtc_get_time());
+    	} else if (strcmp(line,"ram") == 0) {
+    		printf("Available RAM - %u KB\n", init_ram_pages * PGSIZE / 1024);
+    	} else if (strcmp(line,"thread") == 0) {
+    		thread_print_stats();
+    	} else if (strcmp(line,"priority") == 0) {
+    		printf("Priority of the current thread is %d\n", thread_get_priority());
+    	} else if (strcmp(line,"exit") == 0) {
+    		printf("Exiting Shell...\n");
+    		break;
+    	} else {
+    		printf("Unknown Command! Please try again\n");
+    	}
+    } 
+  }
+  shutdown(); 
+  thread_exit();
 }
+
+void readline(char line[], size_t size) {
+	char c;
+	char* pos = line;
+
+	while ((c = input_getc()) != '\r'){
+	  if (pos >= line + size - 1) {
+	    printf("\nMaximum input size exceeded\n");
+	    return;
+	  } else {
+	    if (c != '\b') {
+	    printf("%c",c);
+	    *pos++ = c;
+	    } else {
+	      if (pos > line){
+		printf("\b \b");
+		pos--;
+	      }
+	    }
+	  }
+	}
+	*pos = '\0';
+	printf("\n");
+}
+
+
 
 /* Clear the "BSS", a segment that should be initialized to
    zeros.  It isn't actually stored on disk or zeroed by the
