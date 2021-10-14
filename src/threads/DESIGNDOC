@@ -9,7 +9,7 @@
 >> Please cite any offline or online sources you consulted while
 >> preparing your submission, other than the Pintos documentation, course
 >> text, lecture notes, and course staff. If you fail to do so while your
->> soltion contains such material you will be penalized.
+>> solution contains such material you will be penalized.
 
 			     ALARM CLOCK
 			     ===========
@@ -20,26 +20,57 @@
 >> `struct' member, global or static variable, `typedef', or
 >> enumeration.  Identify the purpose of each in 25 words or less.
 
+struct list sleep_list;
+    to keep the sleeping threads in a list where we can check to wake them
+    up when the time is up.
+
+int64_t wakeup_time;
+    this is added to thread struct in thread.h to wake the thread after the
+    sleeping is done.
+
+void timer_sleep (int64_t ticks);
+    rewriting the code to avoid busy waiting. In here, we are blocking the
+    thread. not yielding.
+
+static void timer_interrupt (struct intr_frame *args UNUSED);
+    rewriting the code to wake up the sleeping threads that have exceeded
+    their wakeup time
+
+
+
 ---- ALGORITHMS ----
 
 >> A2: Briefly describe what happens in a call to timer_sleep(),
 >> including the effects of the timer interrupt handler.
 
+
 >> A3: What steps are taken to minimize the amount of time spent in
 >> the timer interrupt handler?
+
+
 
 ---- SYNCHRONIZATION ----
 
 >> A4: How are race conditions avoided when multiple threads call
 >> timer_sleep() simultaneously?
 
+
 >> A5: How are race conditions avoided when a timer interrupt occurs
 >> during a call to timer_sleep()?
+
+
 
 ---- RATIONALE ----
 
 >> A6: Why did you choose this design?  In what ways is it superior to
 >> another design you considered?
+    This design avoids busy waiting. In timer_sleep, thread is not yielded
+    to the ready state. It is blocked with thread_block().
+    In the sleep_list, contains all the sleeping threads in a sorted order.
+    Thread is awakened using timer_interrupt() method. since timer runs in
+    100 ticks per sec, it can determine the exact time to awake the thread.
+
+    This is superior than ????????????????????????????
 
 			 PRIORITY SCHEDULING
 			 ===================
