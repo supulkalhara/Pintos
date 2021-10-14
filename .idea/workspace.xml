@@ -11,7 +11,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d04933a0-5115-4cb3-82e6-69a992f08562" name="Default Changelist" comment="Added design Doc">
+    <list default="true" id="d04933a0-5115-4cb3-82e6-69a992f08562" name="Default Changelist" comment="changed project to alarm">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/devices/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/devices/timer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/threads/DESIGNDOC" beforeDir="false" afterPath="$PROJECT_DIR$/src/threads/DESIGNDOC" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/threads/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/threads/thread.c" afterDir="false" />
@@ -42,17 +43,18 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager">
-    <configuration name="pintos" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="pintos" TARGET_NAME="pintos" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="pintos" RUN_TARGET_NAME="pintos">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="pintos" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="pintos" TARGET_NAME="pintos" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="pintos" RUN_TARGET_NAME="pintos">
       <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
@@ -66,7 +68,10 @@
       <updated>1632661469377</updated>
       <workItem from="1632661471555" duration="7196000" />
       <workItem from="1633675298607" duration="5926000" />
-      <workItem from="1634106966766" duration="10363000" />
+      <workItem from="1634106966766" duration="10885000" />
+      <workItem from="1634207018118" duration="12000" />
+      <workItem from="1634207052308" duration="2210000" />
+      <workItem from="1634230917080" duration="2123000" />
     </task>
     <task id="LOCAL-00001" summary="no changes">
       <created>1632668649684</created>
@@ -82,7 +87,21 @@
       <option name="project" value="LOCAL" />
       <updated>1633714533164</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="changed project to alarm">
+      <created>1634205644987</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1634205644987</updated>
+    </task>
+    <task id="LOCAL-00004" summary="changed project to alarm">
+      <created>1634205661613</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1634205661613</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -103,6 +122,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="no changes" />
     <MESSAGE value="Added design Doc" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added design Doc" />
+    <MESSAGE value="changed project to alarm" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed project to alarm" />
   </component>
 </project>

@@ -240,6 +240,7 @@ thread_unblock (struct thread *t)
   list_push_back (&ready_list, &t->elem);
   list_sort (&ready_list, cmp_priority, NULL);
   t->status = THREAD_READY;
+  priority_yield();
   intr_set_level (old_level);
 }
 
@@ -339,6 +340,8 @@ void
 thread_set_priority (int new_priority) 
 {
   thread_current ()->priority = new_priority;
+  list_sort(&ready_list, cmp_priority, NULL);
+  priority_yield();
 }
 
 /* Returns the current thread's priority. */
@@ -582,6 +585,29 @@ allocate_tid (void)
   return tid;
 }
 
+bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *aux) {
+    if ((list_entry(first, struct thread, elem)->wakeup_time) > (list_entry(second, struct thread, elem)->wakeup_time) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+bool cmp_priority(struct list_elem *first, struct list_elem *second, void *aux) {
+    if ((list_entry(first, struct thread, elem)->priority) > (list_entry(second, struct thread, elem)->wakeup_time) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void priority_yield() {
+    struct thread *current_thread = thread_current();
+
+    if (current_thread->priority < list_entry(list_begin(&ready_list), struct thread, elem) {
+        thread_yield();
+    }
+}
 
 
 /* Offset of `stack' member within `struct thread'.

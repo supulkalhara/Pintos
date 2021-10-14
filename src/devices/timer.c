@@ -100,8 +100,8 @@ timer_sleep (int64_t ticks)
 
     cLevel = intr_disable();
     cThread = thread_current();
-    cThread->waketick = timer_ticks() + ticks;
-    list_insert_ordered (&sleep_list, &cThread->elem, cmp_waketick, NULL);
+    cThread->wakeup_time = timer_ticks() + ticks;
+    list_insert_ordered (&sleep_list, &cThread->elem, cmp_wakeup_time, NULL);
     thread_block();
     intr_set_level(cLevel);
 }
@@ -190,7 +190,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
     {
         head = list_front(&sleep_list);
         hThread = list_entry (head, struct thread, elem);
-        if(hThread->waketick > ticks)
+        if(hThread->wakeup_time > ticks)
             break;
         list_remove (head);
         thread_unblock(hThread);

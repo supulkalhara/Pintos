@@ -139,7 +139,8 @@ void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 
-bool cmp_waketick(struct list_elem *first, struct list_elem *second, void *aux);
+bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *aux);
 bool cmp_priority(struct list_elem *first, struct list_elem *second, void *aux);
 
+void priority_yield();
 #endif /* threads/thread.h */

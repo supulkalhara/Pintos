@@ -36,34 +36,44 @@ static void timer_interrupt (struct intr_frame *args UNUSED);
     rewriting the code to wake up the sleeping threads that have exceeded
     their wakeup time
 
-
+bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *aux);
+    Sorting threads in a descending order
 
 ---- ALGORITHMS ----
 
 >> A2: Briefly describe what happens in a call to timer_sleep(),
 >> including the effects of the timer interrupt handler.
+    timer_sleep() - > thread
+    thread -> wakeup_time
+    thread_block()
+    time_inturrupt -> wake
+
 
 
 >> A3: What steps are taken to minimize the amount of time spent in
 >> the timer interrupt handler?
-
+    100 times per sec
+    order insert
+    break
 
 
 ---- SYNCHRONIZATION ----
 
 >> A4: How are race conditions avoided when multiple threads call
 >> timer_sleep() simultaneously?
+    interrupt_disable()
 
 
 >> A5: How are race conditions avoided when a timer interrupt occurs
 >> during a call to timer_sleep()?
-
+    interrupt_disable()
 
 
 ---- RATIONALE ----
 
 >> A6: Why did you choose this design?  In what ways is it superior to
 >> another design you considered?
+
     This design avoids busy waiting. In timer_sleep, thread is not yielded
     to the ready state. It is blocked with thread_block().
     In the sleep_list, contains all the sleeping threads in a sorted order.
@@ -71,6 +81,7 @@ static void timer_interrupt (struct intr_frame *args UNUSED);
     100 ticks per sec, it can determine the exact time to awake the thread.
 
     This is superior than ????????????????????????????
+
 
 			 PRIORITY SCHEDULING
 			 ===================
