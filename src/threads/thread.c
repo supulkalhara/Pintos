@@ -610,6 +610,7 @@ void priority_yield() {
     }
 }
 
+
 
 /* Offset of `stack' member within `struct thread'.
    Used by switch.S, which can't figure it out on its own. */
