@@ -172,6 +172,9 @@ thread_create (const char *name, int priority,
   struct switch_threads_frame *sf;
   tid_t tid;
 
+  /*********************************************************************/
+  enum intr_level old_level;
+
   ASSERT (function != NULL);
 
   /* Allocate thread. */
@@ -182,6 +185,9 @@ thread_create (const char *name, int priority,
   /* Initialize thread. */
   init_thread (t, name, priority);
   tid = t->tid = allocate_tid ();
+
+  /*********************************************************************/
+  old_level = intr_disable ();
 
   /* Stack frame for kernel_thread(). */
   kf = alloc_frame (t, sizeof *kf);
@@ -198,8 +204,18 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
   sf->ebp = 0;
 
+  /*********************************************************************/
+  intr_set_level (old_level);
+
+
   /* Add to run queue. */
   thread_unblock (t);
+
+  /*********************************************************************/
+  old_level = intr_disable ();
+  if(t->priority > thread_current()->priority)
+    thread_yield();
+  intr_set_level (old_level);
 
   return tid;
 }
@@ -339,9 +355,36 @@ thread_foreach (thread_action_func *func, void *aux)
 void
 thread_set_priority (int new_priority) 
 {
+
+  /*********************************************************************/
+    enum intr_level old_level;
+    old_level = intr_disable ();
+    if(list_empty(&thread_current()->pot_donors))
+    {
+        thread_current()->priority = new_priority;
+        thread_current()->basepriority = new_priority;
+    }
+    else if(new_priority > thread_current()->priority)
+    {
+        thread_current()->priority = new_priority;
+        thread_current()->basepriority = new_priority;
+    }
+    else
+        thread_current()->basepriority = new_priority;
+    if(!list_empty(&ready_list))
+    {
+        struct list_elem *front = list_front(&ready_list);
+        struct thread *fthread = list_entry (front, struct thread, elem);
+        if(fthread->priority > thread_current ()->priority)
+            thread_yield();
+    }
+    intr_set_level (old_level);
+
+  /*
   thread_current ()->priority = new_priority;
   list_sort(&ready_list, cmp_priority, NULL);
   priority_yield();
+  */
 }
 
 /* Returns the current thread's priority. */
