@@ -126,6 +126,7 @@ const char *thread_name (void);
 
 void thread_exit (void) NO_RETURN;
 void thread_yield (void);
+void priority_yield(void);
 
 /* Performs some operation on thread t, given auxiliary data AUX. */
 typedef void thread_action_func (struct thread *t, void *aux);
@@ -139,8 +140,7 @@ void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 
-bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *aux);
-bool cmp_priority(struct list_elem *first, struct list_elem *second, void *aux);
+bool cmp_wakeup_time(const struct list_elem *first,const struct list_elem *second, void *aux);
+bool cmp_priority(const struct list_elem *first,const struct list_elem *second, void *aux);
 
-void priority_yield();
 #endif /* threads/thread.h */

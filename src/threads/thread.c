@@ -585,16 +585,16 @@ allocate_tid (void)
   return tid;
 }
 
-bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *aux) {
-    if ((list_entry(first, struct thread, elem)->wakeup_time) > (list_entry(second, struct thread, elem)->wakeup_time) {
+bool cmp_wakeup_time(const struct list_elem *first,const struct list_elem *second, void *aux) {
+    if ((list_entry(first, struct thread, elem)->wakeup_time) > (list_entry(second, struct thread, elem)->wakeup_time)) {
         return 0;
     } else {
         return 1;
     }
 }
 
-bool cmp_priority(struct list_elem *first, struct list_elem *second, void *aux) {
-    if ((list_entry(first, struct thread, elem)->priority) > (list_entry(second, struct thread, elem)->wakeup_time) {
+bool cmp_priority(const struct list_elem *first,const struct list_elem *second, void *aux) {
+    if ((list_entry(first, struct thread, elem)->priority) > (list_entry(second, struct thread, elem)->priority)) {
         return 1;
     } else {
         return 0;
@@ -603,9 +603,10 @@ bool cmp_priority(struct list_elem *first, struct list_elem *second, void *aux) 
 
 void priority_yield() {
     struct thread *current_thread = thread_current();
-
-    if (current_thread->priority < list_entry(list_begin(&ready_list), struct thread, elem) {
-        thread_yield();
+    if (!list_empty(&ready_list)){
+      if ((current_thread->priority < (int)(list_entry(list_begin(&ready_list), struct thread, elem))->priority)&& (current_thread != idle_thread)) {
+          thread_yield();
+      }
     }
 }
 
