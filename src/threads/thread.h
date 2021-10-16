@@ -94,6 +94,23 @@ struct thread
 
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
+
+    /*
+     *
+     *
+    struct list_elem donorelem;
+    int64_t waketick;
+    int basepriority;
+    struct thread *locker;
+    struct list pot_donors;
+    struct lock *blocked;
+    int nice;
+    int recent_cpu;
+     *
+     *
+     *
+    */
+
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
@@ -139,6 +156,14 @@ int thread_get_nice (void);
 void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
+
+/*
+ *
+ *
+//	int load_avg;
+ *
+ *
+ */
 
 bool cmp_wakeup_time(const struct list_elem *first,const struct list_elem *second, void *aux);
 bool cmp_priority(const struct list_elem *first,const struct list_elem *second, void *aux);

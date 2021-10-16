@@ -43,8 +43,7 @@ bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *au
 
 >> A2: Briefly describe what happens in a call to timer_sleep(),
 >> including the effects of the timer interrupt handler.
-    timer_sleep() - > thread
-    thread -> wakeup_time
+    timer_sleep() will take the current_thread() and set its wakeup_time.
     thread_block()
     time_inturrupt -> wake
 

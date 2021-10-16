@@ -11,12 +11,21 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d04933a0-5115-4cb3-82e6-69a992f08562" name="Default Changelist" comment="changed project to alarm">
+    <list default="true" id="d04933a0-5115-4cb3-82e6-69a992f08562" name="Default Changelist" comment="changed project- priority scheduling">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/devices/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/devices/timer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/misc/bochs-2.6.2-build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/misc/bochs-2.6.2-build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/misc/stale/bochs-2.2.6-build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/misc/stale/bochs-2.2.6-build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/misc/toolchain-build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/misc/toolchain-build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/make-grade" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/make-grade" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/threads/DESIGNDOC" beforeDir="false" afterPath="$PROJECT_DIR$/src/threads/DESIGNDOC" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/threads/synch.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/threads/synch.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/threads/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/threads/thread.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/threads/thread.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/threads/thread.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/backtrace" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/backtrace" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/pintos" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/pintos" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/pintos-gdb" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/pintos-gdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/pintos-mkdisk" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/pintos-mkdisk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/pintos-set-cmdline" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/pintos-set-cmdline" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +56,6 @@
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="pintos" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="pintos" TARGET_NAME="pintos" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="pintos" RUN_TARGET_NAME="pintos">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -71,7 +75,9 @@
       <workItem from="1634106966766" duration="10885000" />
       <workItem from="1634207018118" duration="12000" />
       <workItem from="1634207052308" duration="2210000" />
-      <workItem from="1634230917080" duration="2123000" />
+      <workItem from="1634230917080" duration="2386000" />
+      <workItem from="1634299609130" duration="504000" />
+      <workItem from="1634320844618" duration="6397000" />
     </task>
     <task id="LOCAL-00001" summary="no changes">
       <created>1632668649684</created>
@@ -101,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634205661613</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="changed project- priority scheduling">
+      <created>1634233133889</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1634233133890</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,6 +136,7 @@
     <MESSAGE value="no changes" />
     <MESSAGE value="Added design Doc" />
     <MESSAGE value="changed project to alarm" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed project to alarm" />
+    <MESSAGE value="changed project- priority scheduling" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed project- priority scheduling" />
   </component>
 </project>
