@@ -44,28 +44,34 @@ bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *au
 >> A2: Briefly describe what happens in a call to timer_sleep(),
 >> including the effects of the timer interrupt handler.
     timer_sleep() will take the current_thread() and set its wakeup_time.
-    thread_block()
-    time_inturrupt -> wake
+    Then it blocks the thread using thread_block(). Now the blocked thread
+    is added to the sleep_list.
+    In timer_interrupt(), it frequently looking at sleep_list elements and check
+    for any threads that has exceeded its wakeup_time. If there is any, wake them
+    using thread_unblock()
 
 
 
 >> A3: What steps are taken to minimize the amount of time spent in
 >> the timer interrupt handler?
-    100 times per sec
-    order insert
-    break
+    The sleep_list is in descending order where the thread who has the lowest
+    wakeup_time is the first element og the list.
+    Hence when we checking the sleep_list, we only need to check the first element.
+    If it has exceeded the wakeup_time, it is awakened. and the loop is broken.
+    If it has not exceeded the wakeup_time, no other element in the list has exceeded.
+    Therefore no need of checking anymore. Loop is broken.
 
 
 ---- SYNCHRONIZATION ----
 
 >> A4: How are race conditions avoided when multiple threads call
 >> timer_sleep() simultaneously?
-    interrupt_disable()
+    by disabling interrupts using the interrupt_disable() method.
 
 
 >> A5: How are race conditions avoided when a timer interrupt occurs
 >> during a call to timer_sleep()?
-    interrupt_disable()
+    by disabling interrupts using the interrupt_disable() method.
 
 
 ---- RATIONALE ----
@@ -78,8 +84,8 @@ bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *au
     In the sleep_list, contains all the sleeping threads in a sorted order.
     Thread is awakened using timer_interrupt() method. since timer runs in
     100 ticks per sec, it can determine the exact time to awake the thread.
-
-    This is superior than ????????????????????????????
+    Some designs use locks to avoid race conditions but in here it is done
+    by disabling interrupts. Busy waiting is also stopped from this design.
 
 
 			 PRIORITY SCHEDULING
@@ -91,31 +97,162 @@ bool cmp_wakeup_time(struct list_elem *first, struct list_elem *second, void *au
 >> `struct' member, global or static variable, `typedef', or
 >> enumeration.  Identify the purpose of each in 25 words or less.
 
+struct list_elem donor;
+    priority donor to a thread.
+
+struct thread *thread_locker;
+    the thread which is currently holding the lock that the current thread is
+    trying to acquire.
+
+struct list priority_donors;
+    list of all donors sorted by their priority descending order
+
+struct lock *waiting_lock;
+    current thread is trying to acquire this lock
+
+int basepriority;
+    Initial priority which a thread has from beginning.
+
+void priority_yield(void);
+    If the current threads priority is smaller than the priority of the first
+    element in the ready_queue, current thread will yield.
+
+bool cmp_priority(const struct list_elem *first,const struct list_elem *second, void *aux);
+    comparing priorities in a descending order
+
+void thread_unblock (struct thread *t)
+    /* changed the code */
+    when pushing threads to ready list, it is sorted in priority at the moment
+
+void thread_yield (void)
+    /* changed the code */
+    when pushing threads to ready list, it is sorted in priority at the moment
+
+void thread_set_priority (int new_priority)
+    /* changed the code */
+    If the setting priority is less than the donated priority now the thread has,
+    no change is needed.
+    If the thread is not in a donated priority, it is updated to the set
+    priority value.
+
+static void	init_thread (struct thread *t, const char *name, int priority)
+    Initializing,
+        t->thread_locker = NULL;
+        t->waiting_lock = NULL;
+        t->basepriority = priority;
+
+void sema_up (struct semaphore *sema)
+    When waking up one thread of those waiting for SEMA sorting from priority
+    before unblocking them.
+
+void lock_acquire (struct lock *lock)
+    When a thread is trying to acquire a lock, it checks whether the lock is
+    acquired by another. if it is, check the holding lock's priority. If the priority
+    is less than the current_thread, it will donate its priority to the lock holding
+    thread. Otherwise current_thread becomes the lock holder.
+
+bool lock_try_acquire (struct lock *lock)
+    When current_thread trying to acquire lock, if it is hold by another thread,
+    without waiting current_thread will return.
+
+void lock_release (struct lock *lock)
+    when releasing, if there are no priority donors, set the priority to base
+    priority. If there are, get highest priority donor and check if it has any other
+    donors. Update its priority according to that and send in to the head of the ready
+    queue in order to acquire the lock.
+
+void cond_signal (struct condition *cond, struct lock *lock UNUSED)
+    notifying all the waiters the sema is up
+
+bool compare_priority(struct list_elem *first, struct list_elem *second, void *aux)
+    comparing priorities
+
+
 >> B2: Explain the data structure used to track priority donation.
 >> Use ASCII art to diagram a nested donation.  (Alternately, submit a
 >> .png file.)
+    Linked Lists were used to track priority donation.
+    /*********************************************************************/
+                                ????????????????
+
 
 ---- ALGORITHMS ----
 
 >> B3: How do you ensure that the highest priority thread waiting for
 >> a lock, semaphore, or condition variable wakes up first?
+    when inserting a thread to a list, the list is always sorted from its priority.
+    hence, always the first element in the list is the highest priority element.
+
 
 >> B4: Describe the sequence of events when a call to lock_acquire()
 >> causes a priority donation.  How is nested donation handled?
 
+    If the lock has a holder,
+        update current threads property thread_locker as the lock holder.
+
+        If the current thread has donor priority, add the priority to the
+        priority_donors list of the lock holding thread. Else add the initial
+        priority to the list.
+
+        Then update the property waiting_lock as the lock which the current thread
+        is waiting for.
+
+        In a loop check if the current_thread's priority is larger than the
+        holding thread's priority. If it is, update the donated priority of the
+        lock holding thread to the current_thread's priority.
+        Then go to the next element.
+    else,
+        current_thread becomes the lock holder.
+
+
 >> B5: Describe the sequence of events when lock_release() is called
 >> on a lock that a higher-priority thread is waiting for.
+
+
+    If there are no existing priority donors,
+        current_threads priority becomes the base priority (initial priority)
+
+    else there are priority donors,
+        let the first element with the highest priority acquire the lock and remove
+        it from the waiting list.
+
+        if there are priority donors to the new thread, take the maximum donor
+        priority from the priority donors and check whether it is larger than
+        the base priority of the current_thread. If it is, update the priority or
+        else keep the existing priority. After that send the thread to the ready_list
+        by yielding. Now it is in the head of the ready_list.
+
+        else,
+            keep the existing priority.
+
 
 ---- SYNCHRONIZATION ----
 
 >> B6: Describe a potential race in thread_set_priority() and explain
 >> how your implementation avoids it.  Can you use a lock to avoid
 >> this race?
+/*/*/*/*/*/**/****************/*/*/*/*/*/*/*/*/*/
+    When updating the current_threads priority, another thread which has
+    larger priority than all the threads can be go to the ready_list.
+    It can cause unsorted list with incorrect priority donation.
+    By disabling thread interrupts. If the interrupts are disabled ready_queue
+    cannot update before this process.
+    We can use lock to avoid this situation. We can synchronize these by adding
+    a lock field to ready_list,sleep_list list structs ect. We can acquire
+    the lock before modification of the list, and after completion of the
+    modification.
+
 
 ---- RATIONALE ----
 
 >> B7: Why did you choose this design?  In what ways is it superior to
 >> another design you considered?
+    This design is more accurate than any other. Some designs use locks
+    to avoid race conditions but in here it is done by disabling interrupts.
+    This is more faster method since we do not have to iterate through thread
+    lists to check for highest priority threads or thread donors. Highest priority
+    thread is always the head in a list. We only have to check that element. Busy
+    waiting is stopped from this design too.
 
 			   SURVEY QUESTIONS
 			   ================
@@ -128,15 +265,20 @@ the semester.
 
 >> In your opinion, was this assignment, or any one of the three problems
 >> in it, too easy or too hard?  Did it take too long or too little time?
+too hard. took too long time to do this.
 
 >> Did you find that working on a particular part of the assignment gave
 >> you greater insight into some aspect of OS design?
+It did
 
 >> Is there some particular fact or hint we should give students in
 >> future quarters to help them solve the problems?  Conversely, did you
 >> find any of our guidance to be misleading?
+No
 
 >> Do you have any suggestions for the TAs to more effectively assist
 >> students, either for future semesters or the remaining projects?
+Explain the objectives of the code more clearly and guide us through it.
 
 >> Any other comments?
+No
